@@ -32,13 +32,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # This repo uses pnpm (packageManager: pnpm@12.3.4 in package.json).
+      # This repo uses pnpm (packageManager: pnpm@12.15.0 in package.json).
       # pnpm/action-setup must run BEFORE setup-node, otherwise the
       # `cache: pnpm` restore has no store path to work with.
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 12.3.4
+          version: 12.15.0
           run_install: false
 
       - name: Setup Node
