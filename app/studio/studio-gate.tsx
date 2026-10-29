@@ -6,7 +6,7 @@ import { useState } from "react";
 // JavaScript bundle. It keeps casual visitors out of the editor; it is not real
 // security. Anyone who reads the source can recover the password. See
 // SITE_MANAGEMENT_GUIDE.md for why a static host cannot do better.
-const STUDIO_PASSWORD = "yomyom@2013";
+const STUDIO_PASSWORD = "yom@2013";
 
 export default function StudioGate({ wordmark, children }: { wordmark: string; children: React.ReactNode }) {
   const [unlocked, setUnlocked] = useState(false);
