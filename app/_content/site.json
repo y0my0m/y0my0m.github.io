@@ -7,6 +7,7 @@
     "navContact": "Contact",
     "navPictures": "Pictures",
     "navProgress": "Progress",
+    "navExtras": "Extras",
     "signal": "Now transmitting",
     "footerTagline": "Made slowly, somewhere on Earth.",
     "footerCopyright": "© 2026",
@@ -96,14 +97,11 @@
   "extras": {
     "cursor": "none",
     "cursorColor": "#7654ff",
-    "musicTracks": [
-      "/audio/chill-bg1.mp3",
-      "/audio/13am.mp3",
-      "/audio/Glowing Snow.mp3",
-      "/audio/70. The place where it rained (DELTARUNE Chapter 34 Soundtrack) - Toby Fox.mp3"
-    ],
+    "musicTracks": [],
     "musicLabel": "Background music",
-    "musicVolume": 35
+    "musicVolume": 35,
+    "buildCrewAgents": 6,
+    "buildCrewSpeed": 0.65
   },
   "entries": [
     {
@@ -126,6 +124,18 @@
       "title": "On making the internet feel a little more human.",
       "excerpt": "The corners of the web I love most still feel like someone left the light on just for you.",
       "category": "PREFERENCES"
+    }
+  ],
+  "pages": [
+    {
+      "slug": "colophon",
+      "title": "Colophon",
+      "eyebrow": "Behind the curtain",
+      "headlineStart": "How this corner was",
+      "headlineEmphasis": "crafted",
+      "headlineEnd": "& engineered.",
+      "intro": "Typefaces, motion philosophies, and the invisible architecture behind this space.",
+      "body": "Built with Next.js static exports, Anime.js physics, Tailwind styling, and handcrafted micro-interactions.\n\nTypography is anchored by an editorial serif alongside crisp geometric sans. No corporate bloatware, no telemetry trackers — just signal, paper, and sound."
     }
   ]
 }

@@ -46,8 +46,8 @@ export default function CopyEmail({ email }: { email: string }) {
   const label = state === "copied" ? "Copied" : state === "failed" ? "Press Ctrl+C" : "Copy";
 
   return <div className="email-row">
-    <a className="button button-solid contact-button" href={`mailto:${email}`}>{email} <b>↗</b></a>
-    <button type="button" className={`copy-button${state === "copied" ? " is-copied" : ""}`} onClick={onCopy} aria-live="polite">
+    <a className="button button-solid contact-button" href={`mailto:${email}`} data-magnetic="8">{email} <b>↗</b></a>
+    <button type="button" className={`copy-button${state === "copied" ? " is-copied" : ""}`} onClick={onCopy} aria-live="polite" data-magnetic="6">
       {label}
     </button>
     <span className="sr-only" role="status">{state === "copied" ? `Copied ${email} to clipboard` : state === "failed" ? "Copy failed. Select the address and copy manually." : ""}</span>

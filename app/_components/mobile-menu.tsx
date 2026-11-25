@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import type { NavLink } from "./site-chrome";
+import { acquireScrollLock, releaseScrollLock } from "./scroll-lock";
 
 const noopSubscribe = () => () => {};
 const getClient = () => true;
@@ -27,10 +28,10 @@ export default function MobileMenu({ items, name }: { items: NavLink[]; name: st
     if (!open) return;
     const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false); };
     document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
+    acquireScrollLock();
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
+      releaseScrollLock();
     };
   }, [open]);
 

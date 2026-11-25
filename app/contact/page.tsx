@@ -7,5 +7,24 @@ export const metadata: Metadata = { title: "Contact | YOM.", description: "Get i
 
 export default async function ContactPage() {
   const { contact, site } = await getSiteContent();
-  return <PageShell site={site}><section className="page-intro wrap contact-page"><p className="eyebrow"><span /> {contact.eyebrow}</p><h1>{contact.headlineStart} <em>{contact.headlineEmphasis}</em> {contact.headlineEnd}</h1><p>{contact.intro}</p><CopyEmail email={contact.email} /></section></PageShell>;
+  return (
+    <PageShell site={site}>
+      <section className="page-intro wrap contact-page">
+        <p className="eyebrow" data-reveal>
+          <span /> {contact.eyebrow}
+        </p>
+        <h1 data-reveal data-reveal-delay="90">
+          {contact.headlineStart}{" "}
+          <em className="shiny-text">{contact.headlineEmphasis}</em>{" "}
+          {contact.headlineEnd}
+        </h1>
+        <p data-reveal data-reveal-delay="180">
+          {contact.intro}
+        </p>
+        <div data-reveal data-reveal-delay="240">
+          <CopyEmail email={contact.email} />
+        </div>
+      </section>
+    </PageShell>
+  );
 }

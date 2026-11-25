@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const KEY = "yom-music";
 
 function trackName(src: string) {
-  const file = src.split("/").pop() ?? src;
+  const file = decodeURIComponent(src.split("/").pop() ?? src);
   return file.replace(/\.[a-z0-9]+$/i, "").replace(/_/g, " ");
 }
 
@@ -91,8 +91,8 @@ export default function MusicPlayer({ tracks, label, volume }: { tracks: string[
   return <div className="music-player">
     <audio
       ref={audio}
-      src={encodeURI(current)}
-      preload="metadata"
+      src={current}
+      preload="auto"
       loop={false}
       onEnded={() => { skipGuard.current = false; step(1); }}
       onError={() => {
@@ -103,8 +103,8 @@ export default function MusicPlayer({ tracks, label, volume }: { tracks: string[
       }}
       onCanPlay={() => { setReady(true); skipGuard.current = false; }}
     />
-    <div className="music-bar">
-      <button type="button" className="music-toggle" onClick={toggle} aria-pressed={playing} aria-label={playing ? `Pause ${label}` : `Play ${label}`}>
+    <div className="music-bar" data-spotlight>
+      <button type="button" className="music-toggle" onClick={toggle} aria-pressed={playing} aria-label={playing ? `Pause ${label}` : `Play ${label}`} data-magnetic="4">
         <span className={`music-bars${playing ? " is-playing" : ""}`} aria-hidden="true"><i /><i /><i /></span>
         {failed && count === 1 ? "No audio" : playing ? "Pause" : "Play"}
       </button>
@@ -113,8 +113,8 @@ export default function MusicPlayer({ tracks, label, volume }: { tracks: string[
         {count > 1 && <span className="music-count">{index + 1}/{count}</span>}
       </span>
       {count > 1 && <>
-        <button type="button" className="music-skip" onClick={() => step(-1)} aria-label="Previous track">‹</button>
-        <button type="button" className="music-skip" onClick={() => step(1)} aria-label="Next track">›</button>
+        <button type="button" className="music-skip" onClick={() => step(-1)} aria-label="Previous track" data-magnetic="3">‹</button>
+        <button type="button" className="music-skip" onClick={() => step(1)} aria-label="Next track" data-magnetic="3">›</button>
       </>}
     </div>
     <span className="sr-only" role="status">{ready ? `Now playing ${name}` : ""}</span>

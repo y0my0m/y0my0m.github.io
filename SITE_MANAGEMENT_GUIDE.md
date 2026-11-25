@@ -113,6 +113,12 @@ The dark summary bar at the top is the average of all goals and is calculated au
 - Email address
 - Intro paragraph
 
+### Custom pages (/p/[slug])
+
+- Create and manage custom pages dynamically (e.g. `/p/colophon`, `/p/setup`, `/p/reading`)
+- Customize URL slug, title, eyebrow, 3-part headline, introduction, and full markdown-friendly body text
+- Add and remove custom pages with direct live preview links
+
 ## Where content is stored
 
 All editable content lives in:
