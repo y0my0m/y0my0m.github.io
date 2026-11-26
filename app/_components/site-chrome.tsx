@@ -13,6 +13,7 @@ export function navLinks(site: SiteContent["site"]): NavLink[] {
     { href: "/writing", label: site.navWriting },
     { href: "/pictures", label: site.navPictures },
     { href: "/progress", label: site.navProgress },
+    { href: "/game", label: "Game" },
     { href: "/extras", label: site.navExtras ?? "Extras" },
     { href: "/about", label: site.navAbout },
     { href: "/contact", label: site.navContact },

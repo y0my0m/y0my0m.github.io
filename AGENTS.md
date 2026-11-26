@@ -30,6 +30,7 @@ This is the project map for future agents. The repository is a personal static p
 - `/p/[slug]/` — statically generated custom routes from the `pages` array.
 - `/about/` — about page.
 - `/contact/` — contact page and copy-email interaction.
+- `/game/` — client-side pixel-art snowball challenge recreation with keyboard and touch controls.
 - `/studio/` — client-only content editor that downloads an edited `site.json`; it is not a server CMS.
 
 ## Content model
@@ -149,7 +150,12 @@ Studio navigation sections cover site, home, writing, pictures, progress, about,
 - **Writing transmission placement:** `/p/writing/` is intentionally not listed as an Extras card. The `/writing/` archive owns the visible `View more` button that opens the transmission; keep that separation so Extras only contains other custom pages.
 - **GitHub Pages hosting:** this is a root GitHub Pages site (`yomthepro.github.io`), so routes use absolute root paths and `next.config.ts` keeps `output: "export"`, trailing slashes, unoptimized images, and `public/.nojekyll`. If the repository becomes a project Pages site under a subpath, introduce `basePath`/asset-prefix handling systematically rather than manually changing individual links.
 - **Current visual layers:** `FlowWaves` is mounted globally beside `LivingCanvas`; it is fixed, pointer-transparent, DPR-capped, and static under reduced motion. Do not let it affect document dimensions or cover interactive content.
-- **Current footer flow:** `FooterNext` derives its destination from `navLinks(site)` and advances Home → Writing → Pictures → Progress → Extras → About → Contact → Home. Keep the footer and top bar driven by the same route order.
+- **Current footer flow:** `FooterNext` derives its destination from `navLinks(site)` and advances Home → Writing → Pictures → Progress → Game → Extras → About → Contact → Home. Keep the footer and top bar driven by the same route order.
+- **Game route:** `/game/` is a static page shell with the interactive canvas in `app/game/game-board.tsx`. It contains 15 generated-but-distinct snow courses with level names, trees, ice/rock/bridge obstacles, a ball, a red flag, progression, reset, WASD/arrow controls, and touch buttons. The player pushes the ball using proximity and momentum and wins by reaching the flag. Keep the canvas self-contained, responsive, pixelated, and free of external assets so GitHub Pages can export it.
+- **Game safety:** cancel the game rAF and all listeners on unmount; keep the canvas `pointer-events` usable, preserve keyboard focus, and do not add the source reference MP4 to Git. The local reference video is intentionally ignored by `.gitignore`.
+- **Game inspiration credit:** the `/game/` intro credits Aaraiz Kashif as the inspiration for the ball-game concept. Keep that credit visible if the game intro is redesigned.
+- **Game visual direction:** the local reference is a 1920×1080 pixel-art snowy course with an Undertale-like player, white ball, cliffs, trees, bridge sections, and a red flag. The recreation uses original canvas-drawn shapes and does not copy or ship the reference video, sprites, or audio.
+- **Game QA history:** the game was opened in Opera on the local device and visually inspected. The Game nav route, reset state, keyboard movement, rendered pixel course, win state, and next-level control were observed. The route was also included in the successful static export; keep testing desktop and touch layouts after gameplay changes.
 
 ## GitHub Pages deployment contract
 

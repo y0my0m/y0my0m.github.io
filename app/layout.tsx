@@ -49,7 +49,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           src="/build-crew.js"
           strategy="beforeInteractive"
           data-start="manual"
-          data-targets="h1, .hero-copy, .hero-orbit, .entry, .note-card, .about-card, .progress-board, .frame"
+          data-targets="h1, .hero-copy, .hero-orbit, .entry, .note-card, .game-board, .about-card, .progress-board, .frame"
           data-agents={String(Math.min(12, Math.max(1, Math.round(Number(extras.buildCrewAgents) || 6))))}
           data-names="Yom,Atlas,Nova,Cipher,Echo,Builder"
           data-colors="#c7ff3d,#7654ff,#ff5470,#00e5ff,#ffd166,#8338ec"
