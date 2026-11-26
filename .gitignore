@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local reference material used while recreating the game; do not ship the source video.
+Undertales Hardest Challenge Winning the Ball Game.mp4
