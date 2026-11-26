@@ -95,7 +95,7 @@
     ]
   },
   "extras": {
-    "cursor": "none",
+    "cursor": "dot",
     "cursorColor": "#7654ff",
     "musicTracks": [
       "/audio/13am%20-%20Tobyfox.mp3",
@@ -132,16 +132,6 @@
     }
   ],
   "pages": [
-    {
-      "slug": "writing",
-      "title": "Writing archive",
-      "eyebrow": "The notebook, opened",
-      "headlineStart": "Every note has",
-      "headlineEmphasis": "somewhere to go",
-      "headlineEnd": ".",
-      "intro": "A small index of thoughts, projects, and preferences collected over time.",
-      "body": "This is the doorway into the full writing archive. Follow the link below to read every note in order, then keep scrolling to let the Build Crew reveal the archive section by section."
-    },
     {
       "slug": "colophon",
       "title": "Colophon",
