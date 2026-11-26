@@ -74,22 +74,22 @@
       {
         "id": "coding",
         "label": "Coding",
-        "goal": "Ship 4 side projects",
-        "value": 75,
+        "goal": "Theres a long way to go.",
+        "value": 5,
         "note": "Three Dusted, fourth one is this site."
       },
       {
         "id": "writing",
         "label": "School",
         "goal": "Try Locking in, its hard",
-        "value": 75,
+        "value": 45,
         "note": "I Got Way More, TO DO."
       },
       {
         "id": "moving",
         "label": "Sleep",
-        "goal": "Sleep for 8hrs every day.",
-        "value": 46,
+        "goal": "Sleep for 8hrs every day, barely get 5.",
+        "value": 45,
         "note": "Too busy, with school, and projects, You have to respect people that sleep well."
       }
     ]
@@ -97,7 +97,12 @@
   "extras": {
     "cursor": "none",
     "cursorColor": "#7654ff",
-    "musicTracks": [],
+    "musicTracks": [
+      "/audio/13am%20-%20Tobyfox.mp3",
+      "/audio/70.%20The%20place%20where%20it%20rained%20-%20Toby%20Fox.mp3",
+      "/audio/Background%20Music.mp3",
+      "/audio/Glowing%20Snow%20-%20TobyFox.mp3"
+    ],
     "musicLabel": "Background music",
     "musicVolume": 35,
     "buildCrewAgents": 6,
@@ -115,7 +120,7 @@
       "number": "02",
       "date": "October 18, 2026",
       "title": "A small collection of things I Dream of lately.",
-      "excerpt": "Started On Some python projects, Ones a calculator with a Plot Twist",
+      "excerpt": "Started On Some python projects, Ones a duck with a Plot Twist",
       "category": "PROJECTS"
     },
     {
