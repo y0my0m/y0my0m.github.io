@@ -14,7 +14,7 @@ This is the project map for future agents. The repository is a personal static p
 
 ## Current project state
 
-- Framework: Next.js `16.3.4`, React `19`, TypeScript, Tailwind CSS v4, and Anime.js `4.5`.
+- Framework: Next.js `16.4.6`, React `19`, TypeScript, Tailwind CSS v4, and Anime.js `4.5`.
 - Output: static export (`output: "export"`) with trailing slashes in `next.config.ts`; intended for GitHub Pages or another static host.
 - Package manager: pnpm. Main commands are `pnpm dev`, `pnpm lint`, and `pnpm build`.
 - Local preview: `http://localhost:3000`.
@@ -159,9 +159,11 @@ Studio navigation sections cover site, home, writing, pictures, progress, about,
 - `images.unoptimized` is intentional for static hosting. Keep local image paths inside `public/` and preload only known configured assets.
 - `public/.nojekyll` is required so GitHub Pages does not process Next’s underscore-prefixed static assets.
 - `.github/workflows/deploy.yml` runs on pushes to `main`, installs from the frozen lockfile, validates lint and the standalone crew script, builds the export, uploads `out/`, and deploys with the official Pages actions. Keep the workflow permissions and artifact path intact.
+- The workflow uses pnpm’s offline preference and disables Next telemetry during the build; dependency caching is provided by `actions/setup-node` through the pnpm lockfile.
 - GitHub Pages settings must use the Actions source. A successful local build does not prove Pages is configured; after pushing, inspect the Actions run and open every generated route, especially `/p/writing/` and `/studio/`.
 - Before a release, run `pnpm lint && node --check public/build-crew.js && pnpm build && git diff --check`. Confirm `out/.nojekyll`, `out/index.html`, `out/writing/index.html`, `out/extras/index.html`, `out/p/writing/index.html`, and `out/_next/` exist.
 - Do not commit `.next/`, `out/`, local audio replacements, credentials, or editor state. Static content changes belong in `app/_content/site.json`; Studio downloads are review artifacts until manually copied into that file.
+- `pnpm audit --prod` must stay clean. `pnpm peers check` currently reports a non-blocking compatibility warning because `eslint-plugin-import`, `eslint-plugin-jsx-a11y`, and `eslint-plugin-react` declare ESLint support only through version 9 while the project uses ESLint 10; `pnpm lint` is the functional gate. Revisit this when those plugins publish ESLint 10 peer ranges.
 
 Before handing off motion changes, visually check fresh load, client navigation, scroll/resize during loading, `/studio/`, lightbox, mobile menu, reduced motion, and a narrow viewport. Earlier bugs were mostly lifecycle and visual-state bugs, so lint/build alone is not sufficient.
 
