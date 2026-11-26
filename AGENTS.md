@@ -76,9 +76,9 @@ The standalone script uses the Web Animations API and reads its script tag with 
 Invariants:
 
 - The `data-targets` selector must match actual rendered targets: headings, hero copy/orbit, entries, cards, progress board, and gallery frames.
-- The crew queues all targets, including below-fold content. Do not reveal below-fold targets directly through an observer.
+- The crew initially queues targets in or just ahead of the viewport, keeps the rest pending, and visibly builds more targets as scrolling exposes them. Do not reveal below-fold targets directly through an observer.
 - `BuildCrew.restart()` must reset hidden-target state on client-side route changes.
-- Scroll and resize finish the run because document-coordinate measurements become stale.
+- Scroll and resize remeasure and enqueue newly visible targets; they must not strand the crew or animate stale document coordinates.
 - Agents fade out where they finish and are removed in `finally`; never fly them back to corners during teardown.
 - If Web Animations API is unavailable or reduced motion is requested, fail open and show content immediately.
 - Keep crew count bounded to 1–12 and speed bounded to a sensible range.
@@ -134,6 +134,7 @@ Studio navigation sections cover site, home, writing, pictures, progress, about,
 - **Competing scroll locks:** menus, lightboxes, and loaders use the reference-counted `scroll-lock.ts`; never write `body.style.overflow` directly.
 - **Smooth-scroll route warnings:** this project intentionally uses `scroll-behavior: auto`; recheck Next route-transition guidance before changing it.
 - **Stranded Build Crew cursors:** teardown must reveal targets and remove agents in `finally`; never fly agents back to viewport corners.
+- **Below-fold crew regression:** the crew keeps an explicit pending list and only queues targets near the viewport. Do not revert to queueing the entire document on first load, and do not remove the bounded safety finish.
 - **Missing crew configuration:** keep both `document.currentScript` and the `/build-crew.js` selector fallback because `next/script` may wrap the script.
 - **Blank or half-built pages:** retain the five-second safety finish and make `finish()` fail open by revealing targets and removing overlays/listeners.
 - **Loader/crew ordering:** normal pages use `data-start="manual"` and `yom:loader-done`; Studio intentionally starts immediately.
@@ -141,6 +142,26 @@ Studio navigation sections cover site, home, writing, pictures, progress, about,
 - **Dark mode:** it was explicitly removed; do not reintroduce theme gates or toggles without a new request.
 - **Decorative animation/layout:** FlowWaves, LivingCanvas, Noise, and cursor effects must stay fixed/absolute, `pointer-events: none`, and never create scroll dimensions. Canvas resize must reset its transform instead of stacking `scale()` calls.
 - **Device performance:** cap canvas DPR, stop rAF loops on unmount, and render a static visible fallback for reduced motion.
+- **Footer redirect regression:** the footer’s `Next:` control derives its destination from the same ordered `navLinks()` array as the top bar. Keep it route-aware and update that single array when navigation changes; do not hard-code a link back to the current page.
+- **Notes database:** `/extras/` renders `entries` from `app/_content/site.json` through `NotesDatabase`. It is a static content database, not a server CMS; Studio edits/downloads the same entries array. Every `.note-card` must remain in the Build Crew target selector so cards build as they approach the viewport.
+- **Notes links:** every Notes Database card links to `/writing#note-{number}`, and every writing entry owns the matching stable `id`. Preserve this pairing when changing entry identifiers.
+- **Writing transmission:** `/p/writing/` is a real custom page in `site.json`; its primary action is special-cased in the dynamic page renderer to link to `/writing/`. Keep the slug stable unless all links and static params are updated.
+- **Writing transmission placement:** `/p/writing/` is intentionally not listed as an Extras card. The `/writing/` archive owns the visible `View more` button that opens the transmission; keep that separation so Extras only contains other custom pages.
+- **GitHub Pages hosting:** this is a root GitHub Pages site (`yomthepro.github.io`), so routes use absolute root paths and `next.config.ts` keeps `output: "export"`, trailing slashes, unoptimized images, and `public/.nojekyll`. If the repository becomes a project Pages site under a subpath, introduce `basePath`/asset-prefix handling systematically rather than manually changing individual links.
+- **Current visual layers:** `FlowWaves` is mounted globally beside `LivingCanvas`; it is fixed, pointer-transparent, DPR-capped, and static under reduced motion. Do not let it affect document dimensions or cover interactive content.
+- **Current footer flow:** `FooterNext` derives its destination from `navLinks(site)` and advances Home → Writing → Pictures → Progress → Extras → About → Contact → Home. Keep the footer and top bar driven by the same route order.
+
+## GitHub Pages deployment contract
+
+- The canonical remote is `https://github.com/y0my0m/y0my0m.github.io.git`, branch `main`.
+- This is a root user-site Pages repository, so root-relative routes such as `/writing/` and `/p/writing/` are correct. If the repository is ever moved to a project site, introduce a single `basePath`/asset-prefix strategy and update deployment configuration together; never patch links one by one.
+- `next.config.ts` must retain `output: "export"` and `trailingSlash: true`. The build output is `out/`; there is no server runtime, API route, image optimizer, or dynamic backend in production.
+- `images.unoptimized` is intentional for static hosting. Keep local image paths inside `public/` and preload only known configured assets.
+- `public/.nojekyll` is required so GitHub Pages does not process Next’s underscore-prefixed static assets.
+- `.github/workflows/deploy.yml` runs on pushes to `main`, installs from the frozen lockfile, validates lint and the standalone crew script, builds the export, uploads `out/`, and deploys with the official Pages actions. Keep the workflow permissions and artifact path intact.
+- GitHub Pages settings must use the Actions source. A successful local build does not prove Pages is configured; after pushing, inspect the Actions run and open every generated route, especially `/p/writing/` and `/studio/`.
+- Before a release, run `pnpm lint && node --check public/build-crew.js && pnpm build && git diff --check`. Confirm `out/.nojekyll`, `out/index.html`, `out/writing/index.html`, `out/extras/index.html`, `out/p/writing/index.html`, and `out/_next/` exist.
+- Do not commit `.next/`, `out/`, local audio replacements, credentials, or editor state. Static content changes belong in `app/_content/site.json`; Studio downloads are review artifacts until manually copied into that file.
 
 Before handing off motion changes, visually check fresh load, client navigation, scroll/resize during loading, `/studio/`, lightbox, mobile menu, reduced motion, and a narrow viewport. Earlier bugs were mostly lifecycle and visual-state bugs, so lint/build alone is not sufficient.
 

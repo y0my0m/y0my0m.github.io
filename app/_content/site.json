@@ -128,6 +128,16 @@
   ],
   "pages": [
     {
+      "slug": "writing",
+      "title": "Writing archive",
+      "eyebrow": "The notebook, opened",
+      "headlineStart": "Every note has",
+      "headlineEmphasis": "somewhere to go",
+      "headlineEnd": ".",
+      "intro": "A small index of thoughts, projects, and preferences collected over time.",
+      "body": "This is the doorway into the full writing archive. Follow the link below to read every note in order, then keep scrolling to let the Build Crew reveal the archive section by section."
+    },
+    {
       "slug": "colophon",
       "title": "Colophon",
       "eyebrow": "Behind the curtain",

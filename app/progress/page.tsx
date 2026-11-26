@@ -31,8 +31,8 @@ export default async function ProgressPage() {
       </section>
       <section className="gallery-foot wrap" data-reveal>
         <p>Numbers move. Check back later.</p>
-        <Link className="text-link" href="/pictures" data-magnetic="6">
-          Look at some pictures <b>↗</b>
+        <Link className="text-link" href="/extras" data-magnetic="6">
+          See the extras <b>↗</b>
         </Link>
       </section>
     </PageShell>

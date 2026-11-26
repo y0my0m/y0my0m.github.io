@@ -69,8 +69,8 @@ export default async function CustomDynamicPage({
               {page.body}
             </div>
             <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
-              <Link className="text-link" href="/" data-magnetic="6">
-                Back to home <b>↗</b>
+              <Link className="text-link" href={slug === "writing" ? "/writing" : "/"} data-magnetic="6">
+                {slug === "writing" ? "Read all writing" : "Back to home"} <b>↗</b>
               </Link>
               <Link className="text-link" href="/contact" data-magnetic="6">
                 Say hello <b>↗</b>

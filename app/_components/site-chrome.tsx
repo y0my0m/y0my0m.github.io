@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import type { SiteContent } from "../_content/site";
 import MobileMenu from "./mobile-menu";
 import Aurora from "./aurora";
+import FooterNext from "./footer-next";
 
 export type NavLink = { href: string; label: string };
 
@@ -44,7 +45,8 @@ export function SiteHeader({ site }: { site: SiteContent["site"] }) {
 }
 
 export function SiteFooter({ site }: { site: SiteContent["site"] }) {
-  return <footer className="footer wrap"><Link className="wordmark" href="/">{site.name}</Link><nav className="footer-links" aria-label="Footer navigation"><Link href="/writing">Writing</Link><Link href="/pictures">Pictures</Link><Link href="/progress">Progress</Link><Link href="/extras">Extras</Link><Link href="/contact">Contact</Link></nav><p>{site.footerTagline}</p><p>{site.footerCopyright}</p></footer>;
+  const links = navLinks(site);
+  return <footer className="footer wrap"><Link className="wordmark" href="/">{site.name}</Link><nav className="footer-links" aria-label="Footer navigation">{links.map((link) => <Link key={link.href} href={link.href} aria-label={`Go to ${link.label}`}>{link.label}</Link>)}</nav><FooterNext links={links} /><p>{site.footerTagline}</p><p>{site.footerCopyright}</p></footer>;
 }
 
 export function PageShell({ children, site }: { children: ReactNode; site: SiteContent["site"] }) {

@@ -180,6 +180,7 @@
   let safetyTimer = 0;
   let observer = null;
   let viewportListenersBound = false;
+  let enqueueVisible = null;
   const animations = new Set();
 
   function targetsIn(root) {
@@ -233,8 +234,8 @@
     clearTimeout(safetyTimer);
     if (observer) observer.disconnect();
     if (viewportListenersBound) {
-      window.removeEventListener("scroll", finish);
-      window.removeEventListener("resize", finish);
+      window.removeEventListener("scroll", enqueueVisible);
+      window.removeEventListener("resize", enqueueVisible);
       viewportListenersBound = false;
     }
     animations.forEach((animation) => animation.cancel());
@@ -369,7 +370,13 @@
 
     while (!cancelled) {
       const element = queue.shift();
-      if (!element) break;
+      if (!element) {
+        // Keep the crew alive between scrolls. Targets below the fold are
+        // added by enqueueVisible only when they enter the viewing window.
+        if (queue.remaining.length === 0) break;
+        await sleep(120);
+        continue;
+      }
 
       const start = box(element);
       await flyTo({ x: start.x - 4, y: start.y - 4 });
@@ -432,17 +439,33 @@
       else all.push(element);
     }
 
-    // Build the whole page in document order, including content below the fold.
-    const queue = all
+    // Keep below-the-fold work pending. It is intentionally added as the
+    // reader reaches it instead of being built during the initial load.
+    const pending = all
       .map((element) => ({ element, ...box(element) }))
       .sort((a, b) => (Math.abs(a.y - b.y) < 24 ? a.x - b.x : a.y - b.y))
       .map((item) => item.element);
+
+    const queue = [];
+    queue.remaining = pending;
+    enqueueVisible = () => {
+      const top = window.scrollY - window.innerHeight * 0.15;
+      const bottom = window.scrollY + window.innerHeight * 1.15;
+      for (let index = queue.remaining.length - 1; index >= 0; index -= 1) {
+        const element = queue.remaining[index];
+        const { y, h } = box(element);
+        if (y + h >= top && y <= bottom) queue.unshift(queue.remaining.splice(index, 1)[0]);
+      }
+    };
+    enqueueVisible();
+    window.addEventListener("scroll", enqueueVisible, { passive: true });
+    window.addEventListener("resize", enqueueVisible, { passive: true });
+    viewportListenersBound = true;
 
     const layer = createOverlay();
     await Promise.all(crew().map((agent, index) => agentLoop(agent, index, queue, layer)));
     if (cancelled) return;
 
-    // Done with the visible part. Remaining targets below the fold keep their observer.
     running = false;
     if (host) host.remove();
     finish();
@@ -452,11 +475,6 @@
     if (!enabled || running || finished) return;
     running = true;
     cancelled = false;
-    // Document-space measurements become stale as soon as the user scrolls.
-    // Finish atomically instead of letting cursors/frames drift out of sync.
-    window.addEventListener("scroll", finish, { passive: true });
-    window.addEventListener("resize", finish, { passive: true });
-    viewportListenersBound = true;
     run().catch((error) => {
       console.error("[build-crew]", error);
       finish();

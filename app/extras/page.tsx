@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageShell } from "../_components/site-chrome";
 import { getSiteContent } from "../_content/site";
+import NotesDatabase from "./notes-database";
 
 export const metadata: Metadata = {
   title: "Extras | YOM.",
@@ -9,9 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ExtrasPage() {
-  const { pages, site } = await getSiteContent();
+  const { pages, entries, site } = await getSiteContent();
 
-  const customPages = pages && pages.length > 0 ? pages : [
+  const customPages = pages?.filter((page) => page.slug !== "writing").length ? pages.filter((page) => page.slug !== "writing") : [
     {
       slug: "colophon",
       title: "Colophon",
@@ -150,6 +151,8 @@ export default async function ExtrasPage() {
           );
         })}
       </section>
+
+      <NotesDatabase entries={entries} />
 
       <section className="gallery-foot wrap" data-reveal>
         <p>Looking for the human behind these notes?</p>
